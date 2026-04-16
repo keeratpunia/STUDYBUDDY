@@ -13,11 +13,23 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 
+import os
+import requests
+
 # ==================== CONFIGURATION ====================
 BASE_DIR = Path(__file__).resolve().parent
 
-BEHAVIORAL_MODEL_PATH = BASE_DIR / "models" / "attention_model_best.pth"
+BEHAVIORAL_MODEL_PATH = "attention_model_best.pth"
 EMOTION_MODEL_PATH = BASE_DIR / "models" / "face_model.h5"
+
+from huggingface_hub import hf_hub_download
+
+def download_model():
+    model_path = hf_hub_download(
+        repo_id="naevasetia/Behavior_Detection_For_StudyBuddy",
+        filename="attention_model_best.pth"
+    )
+    return model_path
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 CAPTURE_INTERVAL = 120
@@ -432,6 +444,8 @@ def init_models():
     Safe to call multiple times.
     """
     global _behavioral_model, _emotion_model, _face_cascade
+
+    BEHAVIORAL_MODEL_PATH = download_model()
 
     if _behavioral_model is None:
         _behavioral_model = load_behavioral_model(BEHAVIORAL_MODEL_PATH, DEVICE)

@@ -6,6 +6,8 @@
 const { app, BrowserWindow, screen, Tray, Menu, ipcMain, nativeImage, dialog, } = require('electron');
 const path = require('path');
 
+require('dotenv').config();
+
 // require('dotenv').config({
 //   path: path.join(__dirname, '..', '.env')
 // });
@@ -120,7 +122,7 @@ const { shell } = require('electron'); // used to open the browser for consent
 // const OAUTH_PORT = Number(process.env.OAUTH_PORT || 42813);
 
 const GCLIENT_ID = "803497680279-gffi8gkujm2vorvqh0nse8hqemjonvn4.apps.googleusercontent.com";
-const GCLIENT_SECRET = "";
+const GCLIENT_SECRET = process.env.GCLIENT_SECRET;
 const OAUTH_PORT = 42813;
 const REDIRECT_URI = `http://127.0.0.1:${OAUTH_PORT}/oauth2callback`;
 const GCAL_SCOPES = ['https://www.googleapis.com/auth/calendar.events'];
@@ -468,5 +470,3 @@ ipcMain.handle('ai:analytics', async (_evt, payload) => {
     return { ok: false, error: String(err.message || err) };
   }
 });
-
-
